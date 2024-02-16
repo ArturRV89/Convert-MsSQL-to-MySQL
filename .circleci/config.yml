@@ -7,7 +7,7 @@ jobs:
           DEFAULT_DSN: sqlsrv:Server=localhost;
           DEFAULT_USERNAME: sa
           DEFAULT_PASSWORD: p@ssw0rd
-      - image: mcr.microsoft.com/mssql/server:2022-latest
+      - image: mcr.microsoft.com/mssql/server:latest
         environment:
           ACCEPT_EULA: Y
           SA_PASSWORD: p@ssw0rd
@@ -25,7 +25,7 @@ jobs:
             curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
             curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
             apt-get update
-            ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools
+            ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools
             apt-get install -y unixodbc-dev libgssapi-krb5-2
             pecl install sqlsrv
             pecl install pdo_sqlsrv

@@ -9,9 +9,8 @@ $password = getenv('DEFAULT_PASSWORD');
 try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 }catch (PDOException $e) {
-    print_r($e->getMessage());
+    echo "Connection failed: " . $e->getMessage();
 }
 
 $container['db'] = function () use ($pdo) {

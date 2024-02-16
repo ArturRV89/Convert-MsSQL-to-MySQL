@@ -8,9 +8,10 @@ services:
       - .:/app/
     working_dir: /app
     container_name: php-lib
+    command: /bin/bash -c "sleep 1135m"
 
   mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:latest
     env_file: ./docker/mssql/.env
     volumes:
       - ./dump/:/myDB/
@@ -18,3 +19,15 @@ services:
       - "1433:1433"
     working_dir: /app
     container_name: mssql-lib
+
+  mysql:
+    image: mysql:8.0.31
+    restart: always
+    container_name: mysql-lib
+    working_dir: /app
+    volumes:
+      - ../:/application
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "8088:3306"

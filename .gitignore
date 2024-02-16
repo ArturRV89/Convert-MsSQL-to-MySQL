@@ -7,3 +7,6 @@
 
 # phpunit
 /.phpunit.result.cache
+
+#composer
+/composer.lock
