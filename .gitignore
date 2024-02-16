@@ -1,0 +1,9 @@
+# JetBrains
+/.idea
+*.iml
+
+# php
+/vendor
+
+# phpunit
+/.phpunit.result.cache
