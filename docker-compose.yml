@@ -23,11 +23,12 @@ services:
   mysql:
     image: mysql:8.0.31
     restart: always
-    container_name: mysql-lib
     working_dir: /app
     volumes:
       - ../:/application
+      - .docker/mysql/:/init.db
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     ports:
       - "8085:3306"
+    container_name: mysql-lib

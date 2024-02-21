@@ -3,7 +3,7 @@ FROM php:8.2
 # Install basic packages and extensions
 RUN apt-get update \
   && apt-get install -y zlib1g-dev libzip-dev wget gnupg \
-  && docker-php-ext-install zip opcache
+  && docker-php-ext-install zip opcache pdo_mysql
 
 # Composer install
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
