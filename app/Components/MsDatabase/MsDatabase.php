@@ -48,10 +48,6 @@ class MsDatabase
 
     private static bool $disabledSlaveConnection = false;
 
-
-    /**
-     * @return PDO|null
-     */
     public function connectionToDb(): ?PDO
     {
         $dsn = getenv('DEFAULT_DSN');

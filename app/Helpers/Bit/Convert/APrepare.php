@@ -2,6 +2,7 @@
 
 namespace Helpers\Bit\Convert;
 
+use Components\MsDatabase\MsDatabase;
 use Components\NDatabase\NDatabase;
 use Helpers\Import\CLILogger;
 use PDO;
@@ -11,7 +12,8 @@ abstract class APrepare
     protected string $fromDBName;
     protected CLILogger $logger;
     protected string $toDBName;
-    protected PDO $rootPDO;
+    protected PDO $rootSqlPDO;
+    protected $rootMsSqlPDO;
     protected string $tableName = 'bit_table_name';
     protected bool $recreate;
 
@@ -21,13 +23,14 @@ abstract class APrepare
         $this->fromDBName = $fromDBName;
         $this->toDBName = $toDBName;
         $this->recreate = $recreate;
-        $this->rootPDO = NDatabase::getRootPDO();
+        $this->rootSqlPDO = NDatabase::getRootPDO();
+        $this->rootMsSqlPDO = (new MsDatabase)->getRootPDOContainer();
     }
 
     public function tableExists(): bool
     {
         $sql = "SHOW TABLES FROM `{$this->toDBName}` LIKE '{$this->tableName}'";
-        $stmt = $this->rootPDO->prepare($sql);
+        $stmt = $this->rootSqlPDO->prepare($sql);
         $stmt->execute();
         $existingTable = $stmt->fetchColumn();
         $stmt->closeCursor();
@@ -38,7 +41,7 @@ abstract class APrepare
     public function prepare(): void
     {
         $this->createTable();
-//        $this->fillTable();
+        $this->migrateData();
     }
 
     protected function createTable(): void
@@ -47,8 +50,8 @@ abstract class APrepare
             $this->logger->setSuccess()
                 ->simpleMessage("CREATE TABLE `{$this->toDBName}`.`{$this->tableName}`")
                 ->setNormal();
-            $this->rootPDO->query("DROP TABLE IF EXISTS `{$this->toDBName}`.`{$this->tableName}`");
-            $this->rootPDO->query(
+            $this->rootSqlPDO->query("DROP TABLE IF EXISTS `{$this->toDBName}`.`{$this->tableName}`");
+            $this->rootSqlPDO->query(
                 $this->getCreateTableSQL()
             );
         } else {
@@ -58,19 +61,12 @@ abstract class APrepare
         }
     }
 
-    protected function fillTable(): void
+    protected function migrateData(): void
     {
-        $stmt = $this->rootPDO->query(
-            "INSERT INTO `{$this->toDBName}`.`{$this->tableName}`" .
-            $this->getFromSQL()
-        );
-
-        $this->logger->setSuccess()
-            ->simpleMessage("Rows inserted " . $stmt->rowCount())
-            ->setNormal();
+        $this->migrateData();
     }
 
-    abstract protected function getFromSQL(): string;
+    abstract protected function getFromMSSQL(): string;
 
     abstract protected function getCreateTableSQL(): string;
 }

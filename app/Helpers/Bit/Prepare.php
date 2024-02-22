@@ -3,9 +3,9 @@
 namespace Helpers\Bit;
 
 use Components\NDatabase\NDatabase;
+use Helpers\Bit\Convert\Client;
 use Helpers\Bit\Prepare\Breed;
 use Helpers\Bit\Prepare\City;
-use Helpers\Bit\Prepare\Client;
 use Helpers\Bit\Prepare\Diagnos;
 use Helpers\Bit\Prepare\Good;
 use Helpers\Bit\Prepare\GoodGroup;
@@ -79,7 +79,7 @@ class Prepare
 //        $this->prepareByClass(VisitDiagnose::class);
         $this->prepareByClass(Client::class);
 //        $this->prepareByClass(PetColor::class);
-//        $this->prepareByClass(Pet::class);
+        $this->prepareByClass(Pet::class);
     }
 
     private function prepareByClass(string $class): void
