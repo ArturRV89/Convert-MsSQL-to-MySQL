@@ -1,19 +1,17 @@
 <?php
 
-use Components\NSession\NSession;
-use Components\NDatabase\NDatabase;
-use Helpers\Bit\DBImporter;
-use Helpers\Bit\Prepare;
-use Helpers\Import\CLILogger;
-use Helpers\Import\CLILoggerProgress;
-
-
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 require 'vendor/autoload.php';
-$container = require 'container.php';
-$pdo = $container['db'];
+
+use Components\NSession\NSession;
+use Components\NDatabase\NDatabase;
+use Helpers\Bit\Convert;
+use Helpers\Bit\DBImporter;
+use Helpers\Bit\Prepare;
+use Helpers\Import\CLILogger;
+use Helpers\Import\CLILoggerProgress;
 
 const DOMAIN_NAME = 'one';
 
@@ -39,21 +37,14 @@ if (empty($bitDBName) && $mode == 'prepare')
 
 switch($mode) {
     case 'convert' :
+        (new Convert($logger, $bitDBName, true))->prepare();
+        break;
 
-        break;
-    case 'prepare':
-        if (DOMAIN_NAME == 'one') {
-            (new Prepare($logger, $bitDBName, true))->prepare();
-        } else {
-            $logger->setError()
-                ->simpleMessage("Подготовку импорта необходимо запускать только локально")
-                ->setNormal();
-        }
-        break;
     case 'import':
         $importer = new DBImporter($logger);
         $importer->run();
         break;
+
     default:
         $logger->setError()->simpleMessage("Unknown mode '{$mode}'")->setNormal();
         break;

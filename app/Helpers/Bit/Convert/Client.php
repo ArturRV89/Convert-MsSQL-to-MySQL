@@ -1,6 +1,8 @@
 <?php
 
-namespace Helpers\Bit\Prepare;
+namespace Helpers\Bit\Convert;
+
+
 
 class Client extends APrepare
 {
@@ -8,48 +10,49 @@ class Client extends APrepare
 
     protected function getFromSQL(): string
     {
-        return "
-            SELECT
-                id,
-                fname AS first_name,
-                mname as middle_name,
-                sname AS last_name,
-                phone,
-                email,
-                addr_zip,
-                addr_region,
-                addr_street,
-                addr_build,
-                addr_build_k,
-                addr_apt,
-                rec_created,
-                comments,
-                0 AS balance,
-                NULL AS vm_id
-            FROM `{$this->fromDBName}`.`clients`
-        ";
+        return <<<SQL
+            SELECT 
+                u._IDRRef as relationCol,
+                'Адрес' as address,
+                '0000000000' as home_phone,
+                '0000000000' as work_phone,
+                'record' as note,
+                '0.0000000000' as balance,
+                '' as email,
+                'Город' as city,
+                p._Fld5570 as cell_phone,
+                '0' as zip,
+                u._Fld3998 as last_name,
+                u._Fld4000 as first_name,
+                u._Fld4022 as middle_name,
+                '00000000000' as passport_series,
+                '000000000' as lab_number
+            FROM `{$this->fromDBName}`.`_Reference99`
+            JOIN _InfoRg5562 p
+            WHERE u._IDRRef = p._Fld5563_RRRef; 
+            SQL
+        ;
     }
 
     protected function getCreateTableSQL(): string
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
-                `id` INT NOT NULL,
-                `first_name` VARCHAR(50) NOT NULL,
-                `middle_name` VARCHAR(50) NOT NULL,
-                `last_name` VARCHAR(50) NOT NULL,
-                `phone` VARCHAR(50) NOT NULL,
-                `email` VARCHAR(50) NOT NULL,
-                `addr_zip` VARCHAR(50) NOT NULL,
-                `addr_region` VARCHAR(50) NOT NULL,
-                `addr_street` VARCHAR(50) NOT NULL,
-                `addr_build` VARCHAR(50) NOT NULL,
-                `addr_build_k` VARCHAR(50) NOT NULL,
-                `addr_apt` VARCHAR(50) NOT NULL,
-                `rec_created` VARCHAR(50) NOT NULL,
-                `comments` VARCHAR(255) NOT NULL,
-                `balance` DECIMAL(15, 10),
-                `vm_id` INT
+                relationCol binary(16), 
+                address varchar(100), 
+                home_phone varchar(40), 
+                work_phone varchar(40), 
+                note mediumtext,
+                balance decimal(25, 10), 
+                email varchar(255), 
+                city varchar(255), 
+                cell_phone varchar(25), 
+                zip varchar(25), 
+                last_name varchar(50),
+                first_name varchar(50), 
+                middle_name varchar(50), 
+                passport_series varchar(250), 
+                lab_number varchar(20)
             ) DEFAULT CHARSET=utf8;
         ";
     }
