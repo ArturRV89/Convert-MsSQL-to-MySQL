@@ -1,54 +1,62 @@
 <?php
 
-namespace Helpers\Bit\Prepare;
+namespace Helpers\Bit\Convert;
+
+use PDO;
 
 class Pet extends APrepare
 {
-    protected string $tableName = 'vetdesk_pets';
+    protected string $tableName = 'bit_pets';
 
-    protected function getFromSQL(): string
+    protected function getFromMSSQL(): string
     {
-        return "
-            SELECT
-                p.id,
-                p.client_id,
-                p.kind AS pet_type,
-                p.breed,
-                p.birthday,
-                CASE s.value
-                    WHEN 'male' THEN IF(p.sterilized, 'castrated', 'male')
-                    WHEN 'female' THEN IF(p.sterilized, 'sterilized', 'female')
-                END AS sex,
-                p.name,
-                p.rec_created,
-                p.comments,
-                p.color,
-                p.rip,
-                p.rip_date,
-                NULL AS vm_id
-            FROM {$this->fromDBName}.pets AS p
-            LEFT JOIN {$this->fromDBName}.dictionaries_data AS s ON s.id = p.sex
-        ";
+        return
+            <<<SQL
+                SELECT
+                    c._IDRRef as relation_col_owner,
+                    p._Fld4282 as alias,
+                    p._Description as note
+                FROM {$this->fromDBName}.dbo._Reference118 p
+                JOIN {$this->fromDBName}.dbo._Reference99 c
+                    ON p._Fld4291RRef = c._IDRRef
+            SQL;
     }
 
     protected function getCreateTableSQL(): string
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
-                `id` INT NOT NULL,
-                client_id INT,
-                pet_type INT,
-                breed INT,
-                birthday DATETIME,
-                sex VARCHAR(10),
-                name VARCHAR(255),
-                rec_created DATETIME,
-                comments TEXT,
-                color INT,
-                rip BOOL,
-                rip_date DATETIME,
-                `vm_id` INT
+                relation_col_owner binary(16),
+                alias varchar(255),
+                note text
             ) DEFAULT CHARSET=utf8;
         ";
+    }
+
+    protected function migrateData(): void
+    {
+        $mysqlQuery = $this->rootSqlPDO->prepare(
+            "INSERT INTO `{$this->toDBName}`.`{$this->tableName}` (
+                relation_col_owner,
+                alias,
+                note
+            ) VALUES (
+                :value1, :value2, :value3
+            )"
+        );
+
+        $mssqlQuery = $this->rootMsSqlPDO->query($this->getFromMSSQL());
+
+        while ($item = $mssqlQuery->fetch(PDO::FETCH_ASSOC)) {
+            $mysqlQuery->bindParam(':value1', $item['relation_col_owner']);
+            $mysqlQuery->bindParam(':value2', $item['alias']);
+            $mysqlQuery->bindParam(':value3', $item['note']);
+
+            $mysqlQuery->execute();
+
+            $this->logger->setSuccess()
+                ->simpleMessage("Added in \"{$this->tableName}\": {$item['alias']}")
+                ->setNormal();
+        }
     }
 }

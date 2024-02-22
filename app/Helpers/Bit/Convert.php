@@ -124,9 +124,9 @@ class Convert
 //        $this->prepareByClass(Service::class);
 //        $this->prepareByClass(Visit::class);
 //        $this->prepareByClass(VisitDiagnose::class);
-        $this->prepareByClass(Client::class);
+//        $this->prepareByClass(Client::class);
 //        $this->prepareByClass(PetColor::class);
-//        $this->prepareByClass(Pet::class);
+        $this->prepareByClass(Pet::class);
     }
 
     private function prepareByClass(string $class): void

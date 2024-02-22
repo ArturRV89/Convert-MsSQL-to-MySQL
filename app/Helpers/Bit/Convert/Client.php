@@ -12,25 +12,25 @@ class Client extends APrepare
     {
         return
             <<<SQL
-            SELECT 
-                u._IDRRef as relationCol,
-                'address' as address,
-                '0000000000' as home_phone,
-                '0000000000' as work_phone,
-                'record' as note,
-                '0.0000000000' as balance,
-                '' as email,
-                'city' as city,
-                i._Fld5570 as cell_phone,
-                '0' as zip,
-                u._Fld3998 as last_name,
-                u._Fld4000 as first_name,
-                u._Fld4022 as middle_name,
-                '00000000000' as passport_series,
-                '000000000' as lab_number
-            FROM {$this->fromDBName}.dbo._Reference99 u
-            JOIN {$this->fromDBName}.dbo._InfoRg5562 i 
-                ON i._Fld5563_RRRef = u._IDRRef
+                SELECT 
+                    u._IDRRef as relationCol,
+                    'address' as address,
+                    '0000000000' as home_phone,
+                    '0000000000' as work_phone,
+                    'record' as note,
+                    '0.0000000000' as balance,
+                    '' as email,
+                    'city' as city,
+                    i._Fld5570 as cell_phone,
+                    '0' as zip,
+                    u._Fld3998 as last_name,
+                    u._Fld4000 as first_name,
+                    u._Fld4022 as middle_name,
+                    '00000000000' as passport_series,
+                    '000000000' as lab_number
+                FROM {$this->fromDBName}.dbo._Reference99 u
+                JOIN {$this->fromDBName}.dbo._InfoRg5562 i 
+                    ON i._Fld5563_RRRef = u._IDRRef
             SQL;
     }
 
