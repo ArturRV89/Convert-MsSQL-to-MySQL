@@ -9,7 +9,6 @@ use Components\NSession\NSession;
 use Components\NDatabase\NDatabase;
 use Helpers\Bit\Convert;
 use Helpers\Bit\DBImporter;
-use Helpers\Bit\Prepare;
 use Helpers\Import\CLILogger;
 use Helpers\Import\CLILoggerProgress;
 
@@ -29,7 +28,7 @@ $logger = new CLILogger();
 $logger->enable();
 $logger->setProgress(new CLILoggerProgress());
 
-if (empty($bitDBName) && $mode == 'prepare')
+if (empty($bitDBName) && $mode == 'convert')
 {
     $logger->setError()->simpleMessage("Не указан параметр db")->setNormal();
     exit(1);

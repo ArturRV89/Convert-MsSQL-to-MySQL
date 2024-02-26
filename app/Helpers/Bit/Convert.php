@@ -71,7 +71,8 @@ class Convert
     private function findTableNames()
     {
         $sql = <<<SQL
-            SELECT table_name FROM TestDB.INFORMATION_SCHEMA.TABLES;
+            SELECT table_name 
+            FROM TestDB.INFORMATION_SCHEMA.TABLES;
         SQL;
 
         $stmt = $this->rootMsSqlPDO->query($sql);
