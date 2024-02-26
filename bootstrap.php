@@ -48,19 +48,3 @@ switch($mode) {
         $logger->setError()->simpleMessage("Unknown mode '{$mode}'")->setNormal();
         break;
 }
-
-
-
-
-
-//function test(PDO $pdo)
-//{
-//    $sql = <<<SQL
-//    SELECT _Fld5424RRef FROM TestDB.dbo._InfoRg5423 GROUP BY _Fld5424RRef;
-//    SQL;
-//
-//    $stmt = $pdo->query($sql);
-//    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-//}
-//
-//print_r(test($pdo));

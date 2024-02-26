@@ -7,7 +7,7 @@ use Components\NDatabase\NDatabase;
 use Helpers\Bit\Convert\Client;
 use Helpers\Bit\Convert\Breed;
 use Helpers\Bit\Convert\City;
-use Helpers\Bit\Convert\Diagnos;
+use Helpers\Bit\Convert\Diagnose;
 use Helpers\Bit\Convert\Good;
 use Helpers\Bit\Convert\GoodGroup;
 use Helpers\Bit\Convert\Pet;
@@ -118,16 +118,18 @@ class Convert
 //        $this->prepareByClass(PetType::class);
 //        $this->prepareByClass(City::class);
 //        $this->prepareByClass(Street::class);
-//        $this->prepareByClass(Diagnos::class);
+
 //        $this->prepareByClass(GoodGroup::class);
-//        $this->prepareByClass(Good::class);
+
 //        $this->prepareByClass(Vaccine::class);
 //        $this->prepareByClass(Service::class);
 //        $this->prepareByClass(Visit::class);
 //        $this->prepareByClass(VisitDiagnose::class);
-//        $this->prepareByClass(Client::class);
-//        $this->prepareByClass(PetColor::class);
-        $this->prepareByClass(Pet::class);
+
+//        $this->prepareByClass(Diagnose::class);
+//        $this->prepareByClass(Good::class);
+        $this->prepareByClass(Client::class);
+//        $this->prepareByClass(Pet::class);
     }
 
     private function prepareByClass(string $class): void

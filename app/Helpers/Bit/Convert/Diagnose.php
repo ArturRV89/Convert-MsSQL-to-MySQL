@@ -4,27 +4,25 @@ namespace Helpers\Bit\Convert;
 
 use PDO;
 
-class Good extends APrepare
+class Diagnose extends APrepare
 {
-    protected string $tableName = 'bit_goods';
+    protected string $tableName = 'bit_diagnoses';
 
     protected function getFromMSSQL(): string
     {
         return
             <<<SQL
             SELECT
-                _Fld4197 as title,
-                'description' as description
-            FROM {$this->fromDBName}.dbo._Reference113
-            SQL;
+                _Description as title
+            FROM {$this->fromDBName}.dbo._Reference78
+        SQL;
     }
 
     protected function getCreateTableSQL(): string
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
-                title varchar(160),
-                description text
+                title  varchar(250)
             ) DEFAULT CHARSET=utf8;
         ";
     }
@@ -33,10 +31,9 @@ class Good extends APrepare
     {
         $mysqlQuery = $this->rootSqlPDO->prepare(
             "INSERT INTO `{$this->toDBName}`.`{$this->tableName}` (
-                title,
-                description
+                title
             ) VALUES (
-                :value1, :value2
+                :value1
             )"
         );
 
@@ -45,8 +42,6 @@ class Good extends APrepare
 
         while ($item = $mssqlQuery->fetch(PDO::FETCH_ASSOC)) {
             $mysqlQuery->bindParam(':value1', $item['title']);
-            $mysqlQuery->bindParam(':value2', $item['description']);
-
             $mysqlQuery->execute();
 
             $count++;

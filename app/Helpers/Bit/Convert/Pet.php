@@ -46,6 +46,7 @@ class Pet extends APrepare
         );
 
         $mssqlQuery = $this->rootMsSqlPDO->query($this->getFromMSSQL());
+        $count = null;
 
         while ($item = $mssqlQuery->fetch(PDO::FETCH_ASSOC)) {
             $mysqlQuery->bindParam(':value1', $item['relation_col_owner']);
@@ -54,8 +55,9 @@ class Pet extends APrepare
 
             $mysqlQuery->execute();
 
+            $count++;
             $this->logger->setSuccess()
-                ->simpleMessage("Added in \"{$this->tableName}\": {$item['alias']}")
+                ->simpleMessage("[{$count}] Added in \"{$this->tableName}\": {$item['alias']}")
                 ->setNormal();
         }
     }
