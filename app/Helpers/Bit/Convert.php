@@ -113,13 +113,7 @@ class Convert
 
     private function prepareTables()
     {
-//        $this->prepareByClass(Unit::class);
 //        $this->prepareByClass(Breed::class);
-//        $this->prepareByClass(PetType::class);
-//        $this->prepareByClass(City::class);
-//        $this->prepareByClass(Street::class);
-
-//        $this->prepareByClass(GoodGroup::class);
 
 //        $this->prepareByClass(Vaccine::class);
 //        $this->prepareByClass(Service::class);

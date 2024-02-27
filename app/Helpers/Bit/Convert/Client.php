@@ -13,27 +13,29 @@ class Client extends APrepare
         return
             <<<SQL
             SELECT 
-                u._IDRRef as relationCol,
+                c._IDRRef as relationCol,
                 CASE 
                     WHEN ISNULL (i._Fld5585, '') = '' THEN 'address'
                     ELSE i._Fld5577
                 END as address,
                 '0000000000' as home_phone,
                 '0000000000' as work_phone,
-                'record' as note,
+                n._Fld781 as note,
                 '0.0000000000' as balance,
                 '' as email,
                 'city' as city,
                 i._Fld5570 as cell_phone,
                 '0' as zip,
-                u._Fld3998 as last_name,
-                u._Fld4000 as first_name,
-                u._Fld4022 as middle_name,
+                c._Fld3998 as last_name,
+                c._Fld4000 as first_name,
+                c._Fld4022 as middle_name,
                 '00000000000' as passport_series,
                 '000000000' as lab_number
-            FROM {$this->fromDBName}.dbo._Reference99 u
+            FROM {$this->fromDBName}.dbo._Reference99 c
             JOIN {$this->fromDBName}.dbo._InfoRg5562 i 
-                ON i._Fld5563_RRRef = u._IDRRef
+                ON i._Fld5563_RRRef = c._IDRRef
+            JOIN {$this->fromDBName}.dbo._Document206 n
+                ON c._IDRRef = n._Fld775RRef
             SQL;
     }
 
