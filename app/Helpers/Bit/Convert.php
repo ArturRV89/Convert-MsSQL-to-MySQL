@@ -17,7 +17,7 @@ use Helpers\Bit\Convert\Service;
 use Helpers\Bit\Convert\Street;
 use Helpers\Bit\Convert\Unit;
 use Helpers\Bit\Convert\Vaccine;
-use Helpers\Bit\Convert\Visit;
+use Helpers\Bit\Convert\MedicalCard;
 use Helpers\Bit\Convert\VisitDiagnose;
 use Helpers\Import\CLILogger;
 use PDO;
@@ -117,13 +117,12 @@ class Convert
 
 //        $this->prepareByClass(Vaccine::class);
 //        $this->prepareByClass(Service::class);
-//        $this->prepareByClass(Visit::class);
-//        $this->prepareByClass(VisitDiagnose::class);
 
 //        $this->prepareByClass(Diagnose::class);
 //        $this->prepareByClass(Good::class);
         $this->prepareByClass(Client::class);
 //        $this->prepareByClass(Pet::class);
+//        $this->prepareByClass(MedicalCard::class);
     }
 
     private function prepareByClass(string $class): void

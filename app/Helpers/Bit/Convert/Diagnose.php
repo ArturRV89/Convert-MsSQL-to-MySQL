@@ -22,7 +22,8 @@ class Diagnose extends APrepare
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
-                title  varchar(250)
+                id INT auto_increment PRIMARY KEY,
+                title  VARCHAR(250)
             ) DEFAULT CHARSET=utf8;
         ";
     }

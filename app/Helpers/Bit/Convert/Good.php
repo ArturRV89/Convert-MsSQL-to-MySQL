@@ -23,6 +23,7 @@ class Good extends APrepare
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
+                id int auto_increment primary key,
                 title varchar(160),
                 description text
             ) DEFAULT CHARSET=utf8;

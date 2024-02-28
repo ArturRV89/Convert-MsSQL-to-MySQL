@@ -13,13 +13,13 @@ class Pet extends APrepare
         return
             <<<SQL
             SELECT
-                c._IDRRef as relation_col_owner,
-                p._IDRRef as relation_col_for_medcard,
-                p._Fld4282 as alias,
-                p._Description as note
-            FROM {$this->fromDBName}.dbo._Reference118 p
-            JOIN {$this->fromDBName}.dbo._Reference99 c
-                ON p._Fld4291RRef = c._IDRRef
+                client._IDRRef as relation_col_owner,
+                pet._IDRRef as relation_col_for_medcard,
+                pet._Fld4282 as alias,
+                pet._Description as note
+            FROM {$this->fromDBName}.dbo._Reference118 pet
+            JOIN {$this->fromDBName}.dbo._Reference99 client
+                ON pet._Fld4291RRef = client._IDRRef
             SQL;
     }
 
@@ -27,6 +27,7 @@ class Pet extends APrepare
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
+                id int auto_increment primary key,
                 relation_col_owner binary(16),
                 relation_col_for_medcard binary(16),
                 alias varchar(255),

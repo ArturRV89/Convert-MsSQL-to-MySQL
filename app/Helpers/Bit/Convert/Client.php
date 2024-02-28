@@ -12,30 +12,25 @@ class Client extends APrepare
     {
         return
             <<<SQL
-            SELECT 
-                c._IDRRef as relationCol,
-                CASE 
-                    WHEN ISNULL (i._Fld5585, '') = '' THEN 'address'
-                    ELSE i._Fld5577
-                END as address,
+            SELECT
+                client._IDRRef as relationCol,
+                MAX(IIF(ISNULL(info._Fld5585, '') = '', '', info._Fld5577)) as address,
                 '0000000000' as home_phone,
                 '0000000000' as work_phone,
-                n._Fld781 as note,
                 '0.0000000000' as balance,
                 '' as email,
                 'city' as city,
-                i._Fld5570 as cell_phone,
+                MAX(info._Fld5570) as cell_phone,
                 '0' as zip,
-                c._Fld3998 as last_name,
-                c._Fld4000 as first_name,
-                c._Fld4022 as middle_name,
+                client._Fld3998 as last_name,
+                client._Fld4000 as first_name,
+                client._Fld4022 as middle_name,
                 '00000000000' as passport_series,
                 '000000000' as lab_number
-            FROM {$this->fromDBName}.dbo._Reference99 c
-            JOIN {$this->fromDBName}.dbo._InfoRg5562 i 
-                ON i._Fld5563_RRRef = c._IDRRef
-            JOIN {$this->fromDBName}.dbo._Document206 n
-                ON c._IDRRef = n._Fld775RRef
+            FROM {$this->fromDBName}.dbo._Reference99 client
+            JOIN {$this->fromDBName}.dbo._InfoRg5562 info
+                ON info._Fld5563_RRRef = client._IDRRef
+            GROUP BY client._IDRRef, client._Fld3998, client._Fld4000, client._Fld4022
             SQL;
     }
 
@@ -43,6 +38,7 @@ class Client extends APrepare
     {
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
+                id int auto_increment primary key,
                 relationCol binary(16), 
                 address varchar(100), 
                 home_phone varchar(40), 
