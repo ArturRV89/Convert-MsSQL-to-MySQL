@@ -13,8 +13,8 @@ class Good extends APrepare
         return
             <<<SQL
             SELECT
-                _Fld4197 as title,
-                'description' as description
+                _Description as title,
+                '' as description
             FROM {$this->fromDBName}.dbo._Reference113
             SQL;
     }
@@ -24,7 +24,7 @@ class Good extends APrepare
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
                 id int auto_increment primary key,
-                title varchar(160),
+                title varchar(255),
                 description text
             ) DEFAULT CHARSET=utf8;
         ";

@@ -82,11 +82,10 @@ class Convert
 
     private function prepareTables()
     {
-//        $this->prepareByClass(Good::class);
-
-//        $this->prepareByClass(Breed::class);
-//        $this->prepareByClass(Client::class);
-//        $this->prepareByClass(Pet::class);
+        $this->prepareByClass(Good::class);
+        $this->prepareByClass(Breed::class);
+        $this->prepareByClass(Client::class);
+        $this->prepareByClass(Pet::class);
         $this->prepareByClass(MedicalCard::class);
     }
 
