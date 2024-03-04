@@ -14,9 +14,9 @@ class MedicalCard extends APrepare
         return
             <<<SQL
             SELECT
-                pet._IDRRef as patient_id,
-                card._Date_Time as date_create,
-                '' as diagnose,
+                pet._IDRRef as patient_id_relation,
+                CONVERT(BIGINT, DATEDIFF_BIG(SECOND, '1970-01-01', card._Date_Time)) as date_create,
+                0 as diagnose,
                 '' as recommendation,
                 card._Fld1364 as description
             FROM {$this->fromDBName}.dbo._Reference118 pet
@@ -30,8 +30,8 @@ class MedicalCard extends APrepare
         return "
             CREATE TABLE `{$this->toDBName}`.`{$this->tableName}` (
                 id                INT auto_increment PRIMARY KEY,
-                patient_id        BINARY(16),
-                date_create       timestamp,
+                patient_id_relation BINARY(16),
+                date_create       datetime,
                 diagnose          TEXT,
                 recommendation    LONGTEXT,
                 description       LONGTEXT
@@ -43,7 +43,7 @@ class MedicalCard extends APrepare
     {
         $mysqlQuery = $this->rootSqlPDO->prepare(
             "INSERT INTO `{$this->toDBName}`.`{$this->tableName}` (
-                patient_id,
+                patient_id_relation,
                 date_create,
                 diagnose,
                 recommendation,
@@ -57,8 +57,10 @@ class MedicalCard extends APrepare
         $count = null;
 
         while ($item = $mssqlQuery->fetch(PDO::FETCH_ASSOC)) {
-            $mysqlQuery->bindParam(':value1', $item['patient_id']);
-            $mysqlQuery->bindParam(':value2', $item['date_create']);
+            $mysqlDate = date('Y-m-d H:i:s', $item['date_create']);
+
+            $mysqlQuery->bindParam(':value1', $item['patient_id_relation']);
+            $mysqlQuery->bindParam(':value2', $mysqlDate);
             $mysqlQuery->bindParam(':value3', $item['diagnose']);
             $mysqlQuery->bindParam(':value4', $item['recommendation']);
             $mysqlQuery->bindParam(':value5', $item['description']);
@@ -67,7 +69,7 @@ class MedicalCard extends APrepare
 
             $count++;
             $this->logger->setSuccess()
-                ->simpleMessage("[{$count}] Added in \"{$this->tableName}\": {$item['diagnose']}")
+                ->simpleMessage("[{$count}] Added in \"{$this->tableName}\": {$mysqlDate}")
                 ->setNormal();
         }
     }
